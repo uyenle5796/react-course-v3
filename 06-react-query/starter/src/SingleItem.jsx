@@ -1,23 +1,33 @@
+import { useState, useEffect } from "react";
+import { useEditTask, useDeleteTask } from "./customHooks";
+
 const SingleItem = ({ item }) => {
+  const { editTask } = useEditTask();
+  const { isLoading, deleteTask } = useDeleteTask();
+
   return (
-    <div className='single-item'>
+    <div className="single-item">
       <input
-        type='checkbox'
+        type="checkbox"
         checked={item.isDone}
-        onChange={() => console.log('edit task')}
+        onChange={() => {
+          editTask({ id: item.id, isDone: !item.isDone });
+          console.log(item);
+        }}
       />
       <p
         style={{
-          textTransform: 'capitalize',
-          textDecoration: item.isDone && 'line-through',
+          textTransform: "capitalize",
+          textDecoration: item.isDone && "line-through",
         }}
       >
         {item.title}
       </p>
       <button
-        className='btn remove-btn'
-        type='button'
-        onClick={() => console.log('delete task')}
+        className="btn remove-btn"
+        type="button"
+        disabled={isLoading}
+        onClick={() => deleteTask(item.id)}
       >
         delete
       </button>
