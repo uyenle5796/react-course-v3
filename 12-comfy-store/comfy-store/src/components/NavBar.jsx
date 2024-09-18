@@ -1,10 +1,13 @@
 import { BsCart3, BsMoonFill, BsSunFill } from "react-icons/bs";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import NavLinks from "./NavLinks";
 import ThemeToggle from "./ThemeToggle";
 
 export default function NavBar() {
+  const { numItemsInCart } = useSelector((state) => state.cart);
+
   return (
     <nav className="bg-base-200">
       <div className="navbar align-element ">
@@ -41,7 +44,7 @@ export default function NavBar() {
             <div className="indicator">
               <BsCart3 className="h-6 w-6" />
               <span className="badge badge-sm badge-primary indicator-item">
-                8
+                {numItemsInCart || 0}
               </span>
             </div>
           </NavLink>

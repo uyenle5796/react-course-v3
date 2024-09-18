@@ -1,22 +1,46 @@
 import { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { formatPrice, customFetch } from "../utils";
+import { useDispatch } from "react-redux";
+import { addItem } from "../features/cart/cartSlice";
+import axios from "axios";
 
 export const loader = async ({ params }) => {
-  const res = await customFetch.get(`/products/${param.id}`);
-  const products = res.data.data;
-  return { products };
+  // const res = await customFetch.get(`/products/${params.id}`);
+
+  const res = await axios.get(
+    `https://strapi-store-server.onrender.com/api/products/${params.id}`
+  );
+
+  return { product: res.data.data };
 };
 
 export default function SingleProduct() {
-  const { products } = useLoaderData();
+  const dispatch = useDispatch();
+  const { product } = useLoaderData();
   const { image, title, price, description, colors, company } =
-    products.attributes;
+    product.attributes;
   const [productColor, setProductColor] = useState(colors[0]);
   const [amount, setAmount] = useState(1);
-  const poundsAmount = formatPrice(price);
+  const priceInPounds = formatPrice(price);
 
-  const handleAmount = (e) => setAmount(parseInt(e.target.value));
+  const updateAmount = (e) => setAmount(parseInt(e.target.value));
+
+  const addProduct = () =>
+    dispatch(
+      addItem({
+        product: {
+          cartID: product.id + productColor,
+          productID: product.id,
+          image,
+          title,
+          price,
+          amount,
+          productColor,
+          company,
+        },
+      })
+    );
 
   return (
     <section>
@@ -44,9 +68,7 @@ export default function SingleProduct() {
           <h4 className="text-xl text-neutral-content font-bold mt-2">
             {company}
           </h4>
-
-          <p className="mt-3 text-xl">{dollarsAmount}</p>
-
+          <p className="mt-3 text-xl">{priceInPounds}</p>
           <p className="mt-6 leading-8">{description}</p>
 
           {/* COLORS */}
@@ -80,7 +102,7 @@ export default function SingleProduct() {
             <select
               className="select select-secondary select-bordered select-md"
               value={amount}
-              onChange={handleAmount}
+              onChange={updateAmount}
             >
               <option value={1}>1</option>
               <option value={2}>2</option>
@@ -89,10 +111,7 @@ export default function SingleProduct() {
           </div>
           {/* CART BUTTON */}
           <div className="mt-10 ">
-            <button
-              className="btn btn-secondary btn-md"
-              onClick={() => console.log("add to bag")}
-            >
+            <button className="btn btn-secondary btn-md" onClick={addProduct}>
               Add to bag
             </button>
           </div>
