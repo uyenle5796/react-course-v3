@@ -8,7 +8,6 @@ export const loader = async () => {
   const res = await axios.get(
     "https://strapi-store-server.onrender.com/api/products?featured=true"
   );
-
   const products = res.data.data;
   return { products };
 };

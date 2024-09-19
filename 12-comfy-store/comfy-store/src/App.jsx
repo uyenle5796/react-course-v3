@@ -1,7 +1,13 @@
+import { store } from "./store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+// router data loaders
 import { loader as landingLoader } from "./pages/Landing";
 import { loader as productsLoader } from "./pages/Products";
 import { loader as singleProductLoader } from "./pages/SingleProduct";
+// route actions
+import { action as loginAction } from "./pages/Login";
+import { action as registerAction } from "./pages/Register";
+// pages
 import {
   HomeLayout,
   Landing,
@@ -56,15 +62,19 @@ const router = createBrowserRouter([
         path: "orders",
         element: <Orders />,
       },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
-      },
     ],
+  },
+  {
+    path: "login",
+    element: <Login />,
+    errorElement: <ErrorElement />,
+    action: loginAction(store),
+  },
+  {
+    path: "register",
+    element: <Register />,
+    errorElement: <ErrorElement />,
+    action: registerAction,
   },
 ]);
 

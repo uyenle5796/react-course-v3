@@ -15,7 +15,7 @@ const getCartFromLocalStorage = () => {
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState: getCartFromLocalStorage(), // persist data if user closes the app window
+  initialState: getCartFromLocalStorage(), // persist cart data in browser
   reducers: {
     addItem: (state, action) => {
       const { product } = action.payload;
@@ -41,7 +41,7 @@ const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state));
     },
     clearCart: (state) => {
-      localStorage.setItem("cart", JSON.stringify(defaultState));
+      localStorage.setItem("cart", JSON.stringify(initialState));
       return initialState;
     },
     removeItem: (state, action) => {

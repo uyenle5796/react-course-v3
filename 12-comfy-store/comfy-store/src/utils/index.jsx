@@ -7,6 +7,8 @@ export const customFetch = axios.create({
 });
 
 export const formatPrice = (price) => {
+  if (!price) return "£0.00";
+
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "GBP",
